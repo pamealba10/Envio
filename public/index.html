@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario de Contacto</title>
+  <!-- Enlazamos el CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="contenedor-formulario">
+    <h1>Contáctanos</h1>
+    <p class="subtitulo">Déjanos tus datos y te responderemos pronto</p>
+
+    <!-- Le damos un ID al formulario para controlarlo con JS -->
+    <form id="formularioContacto">
+      
+      <div class="grupo-input">
+        <label for="nombre">Nombre completo</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Ej. Juan Pérez" required>
+      </div>
+
+      <div class="grupo-input">
+        <label for="email">Correo electrónico</label>
+        <input type="email" id="email" name="email" placeholder="juan@correo.com" required>
+      </div>
+
+      <button type="submit" id="btnEnviar">Enviar mensaje</button>
+    </form>
+
+    <!-- Aquí aparecerá el mensaje de éxito -->
+    <div id="respuesta"></div>
+  </div>
+
+  <!-- Script para enviar los datos con fetch -->
+  <script>
+    const form = document.getElementById('formularioContacto');
+    const respuestaDiv = document.getElementById('respuesta');
+    const btnEnviar = document.getElementById('btnEnviar');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault(); // Evita que la página se recargue
+
+      // Deshabilitamos el botón mientras se envía
+      btnEnviar.textContent = 'Enviando...';
+      btnEnviar.disabled = true;
+
+      // Capturamos los datos
+      const datos = {
+        nombre: document.getElementById('nombre').value,
+        email: document.getElementById('email').value
+      };
+
+      try {
+        // Enviamos los datos al servidor
+        const res = await fetch('/enviar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(datos)
+        });
+
+        const data = await res.json();
+
+        // Mostramos el mensaje de éxito y aplicamos estilo
+        respuestaDiv.textContent = data.mensaje;
+        respuestaDiv.style.display = 'block'; 
+        
+        // Limpiamos el formulario
+        form.reset();
+
+      } catch (error) {
+        respuestaDiv.textContent = 'Hubo un error al enviar. Intenta de nuevo.';
+        respuestaDiv.style.backgroundColor = '#f8d7da';
+        respuestaDiv.style.color = '#721c24';
+        respuestaDiv.style.borderColor = '#f5c6cb';
+        respuestaDiv.style.display = 'block';
+      } finally {
+        // Restauramos el botón
+        btnEnviar.textContent = 'Enviar mensaje';
+        btnEnviar.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

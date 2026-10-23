@@ -1,0 +1,21 @@
+# Dependencias de Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Variables de entorno (si las llegaras a usar)
+.env
+.env.local
+
+# Archivos del sistema operativo (Mac/Windows)
+.DS_Store
+Thumbs.db
+
+# Archivos de tu editor de código (VS Code)
+.vscode/
+
+# Archivos de compilación o logs
+dist/
+build/
+*.log
